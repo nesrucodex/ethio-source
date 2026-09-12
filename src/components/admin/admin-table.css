@@ -1,0 +1,65 @@
+.admin-data-table {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--card);
+  overflow: hidden;
+}
+.admin-data-table [data-slot="table-head"] {
+  height: 2.5rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  background: var(--muted);
+}
+.admin-data-table [data-slot="table-cell"] {
+  height: calc(var(--control-height) + 0.75rem);
+  padding: 0.375rem 0.875rem;
+  font-size: 0.8125rem;
+  max-width: 24rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.admin-data-table [data-slot="table-head"] {
+  padding-inline: 0.875rem;
+}
+.admin-data-table [data-align="right"] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.admin-data-table .table-empty {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+.admin-table-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+.admin-table-pagination > div {
+  display: flex;
+  gap: 0.375rem;
+}
+.admin-data-table [data-slot="table"] {
+  min-width: 36rem;
+}
+@media (pointer: coarse) {
+  .admin-data-table button {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
+}
+
+.table-inline-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  white-space: nowrap;
+}

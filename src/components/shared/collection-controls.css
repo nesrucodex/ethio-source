@@ -1,0 +1,114 @@
+.filter-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.1875rem;
+  width: min(100%, 32rem);
+  min-width: 0;
+  padding: 0.1875rem;
+  border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--secondary) 65%, var(--background));
+  box-shadow: inset 0 1px 0 #ffffff90;
+  transition:
+    border-color 160ms,
+    box-shadow 160ms;
+}
+.filter-toolbar:has(input:focus-visible) {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 12%, transparent);
+}
+.search-control {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  min-width: 0;
+}
+.filter-toolbar > [data-slot="search-field"] {
+  flex: 1;
+  max-width: none;
+}
+.filter-toolbar > :not([data-slot="search-field"]) {
+  flex-shrink: 0;
+}
+.search-control > svg {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--muted-foreground);
+  transition: color 150ms;
+}
+.search-control > [data-slot="input"] {
+  height: var(--control-height);
+  padding-left: 2.25rem;
+  font-size: 0.8125rem;
+  border-radius: 0.75rem;
+  background: var(--card);
+  box-shadow: none;
+  transition:
+    background-color 160ms,
+    border-color 160ms;
+}
+.filter-toolbar .search-control > [data-slot="input"] {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.filter-toolbar .search-control > [data-slot="input"]:focus-visible {
+  background: color-mix(in srgb, var(--card) 65%, transparent);
+}
+.search-control:focus-within > svg {
+  color: var(--primary);
+}
+.filter-toolbar > [data-slot="button"] {
+  min-height: var(--control-height);
+  height: var(--control-height);
+  padding: 0.35rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  border-radius: 0.75rem;
+  margin: 0;
+  background: var(--card);
+  box-shadow: 0 1px 3px #173e2c09;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition:
+    background-color 150ms,
+    box-shadow 150ms,
+    transform 100ms;
+}
+.filter-toolbar > [data-slot="button"]:active {
+  transform: scale(0.97);
+  box-shadow: none;
+}
+@media (hover: hover) {
+  .filter-toolbar > [data-slot="button"]:hover {
+    background: color-mix(in srgb, var(--primary) 5%, var(--card));
+  }
+}
+@media (max-width: 640px) {
+  .search-control > [data-slot="input"] {
+    font-size: 1rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .filter-toolbar,
+  .search-control > svg,
+  .search-control > [data-slot="input"],
+  .filter-toolbar > [data-slot="button"] {
+    transition: none;
+  }
+  .filter-toolbar > [data-slot="button"]:active {
+    transform: none;
+  }
+}
+@media (prefers-contrast: more) {
+  .filter-toolbar {
+    border-color: var(--foreground);
+  }
+  .filter-toolbar > [data-slot="button"] {
+    border-color: var(--foreground);
+  }
+}

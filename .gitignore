@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.env*
+!.env.example
+.convex/
+*.tsbuildinfo
+playwright-report/
+test-results/
+
+
+.next-build/

@@ -1,0 +1,372 @@
+I do not want this project to be a typical e-commerce application where customers browse products and purchase individual items.
+The purpose of this platform is to create a B2B product sourcing and procurement platform connecting businesses and customers in Ethiopia with manufacturers and suppliers in China.
+The core idea is that products listed on the platform are primarily products that can be manufactured or sourced in bulk from China. Customers should therefore be able to discover products, review their specifications and minimum order quantities, and express interest in purchasing large quantities such as 100, 200, 500, 1,000, or more units.
+The platform should focus on product discovery, bulk purchasing, supplier coordination, quotation requests, communication, documentation, and order management, rather than functioning as a conventional online store.
+The platform will have an agent based sourcing model.
+We will have an agent located in China who will communicate directly with manufacturers and suppliers. The agent will collect product information, pricing, manufacturing details, images, videos, minimum order quantities, available customization options, production timelines, and other relevant information.
+The agent will then publish and maintain these products through the platform.
+Customers and businesses in Ethiopia will be able to browse the available products and evaluate whether a product is suitable for their business.
+For each product, the platform should clearly display information such as:
+- Product name
+- Product description
+- Product category
+- Product images and videos
+- Product specifications
+- Available variants
+- Minimum order quantity (MOQ)
+- Estimated unit price or price range
+- Bulk pricing tiers
+- Available customization options
+- Material and manufacturing information
+- Estimated production time
+- Estimated shipping information
+- Supplier/manufacturer information where appropriate
+- Product status
+- Date the product information was last updated
+The customer-facing application should provide a modern product discovery experience.
+Users should be able to:
+- Browse products by category
+- Search for products
+- Filter products by MOQ
+- Filter by price range
+- Filter by category
+- Filter by customization availability
+- Sort products
+- Save/favorite products
+- Compare products where appropriate
+- View detailed product information
+- Request more information about a product
+- Request a quotation
+- Specify the quantity they are interested in purchasing
+The quantity selector should be designed specifically for bulk orders, rather than individual retail purchases.
+For example, instead of simply showing:
+Quantity: 1
+the system should make it clear that the product may have a minimum order quantity such as:
+Minimum order quantity: 500 units
+and allow the customer to request quantities such as 500, 1,000, 2,000, or a custom quantity.
+The customer should not necessarily purchase the product directly through a traditional checkout system.
+Instead, after finding a product they are interested in, the customer should be able to initiate a product inquiry or quotation request.
+The customer can provide:
+- Product
+- Desired quantity
+- Required customization
+- Target budget, if applicable
+- Delivery destination
+- Additional requirements
+- Attachments or reference images
+- Additional comments
+The request should then be sent to the appropriate customer support or sourcing team.
+The agent or support team can communicate with the customer, confirm the requirements, negotiate pricing with the manufacturer, and eventually provide a quotation.
+The quotation process should support multiple stages, such as:
+1. Inquiry submitted
+2. Inquiry under review
+3. Supplier contacted
+4. Supplier quotation received
+5. Customer quotation prepared
+6. Negotiation
+7. Quotation accepted
+8. Order confirmed
+9. Production
+10. Quality inspection
+11. Shipping
+12. Delivered
+13. Completed
+The system should maintain the entire history of this process.
+Customers should have multiple ways to contact the support team.
+Depending on the available infrastructure, this may include:
+- Email
+- Phone/voice calls
+- Telegram
+- In-platform messaging
+- Potentially WhatsApp or other communication channels in the future
+The customer-facing application should clearly expose the available support channels.
+For example, a customer could see:
+- Contact support
+- Call support
+- Chat on Telegram
+- Send an email
+- Request a callback
+The platform should also keep communication and inquiry information associated with the customer's account and relevant order or quotation.
+Customers should be able to create accounts and manage their business information.
+A customer profile may contain:
+- Name
+- Company/business name
+- Phone number
+- Email
+- Country
+- City
+- Delivery address
+- Business type
+- Tax/business information where required
+- Preferred communication method
+- Saved products
+- Previous inquiries
+- Quotations
+- Orders
+- Documents
+- Contracts
+- Communication history
+The system should distinguish between individual customers and business/company accounts if that distinction becomes useful for the business model.
+Because this is a B2B sourcing platform, the system needs proper document management.
+Some transactions may require customers to sign agreements, contracts, purchase documents, specifications, quotations, or other business documents.
+The platform should therefore support:
+- Uploading documents
+- Viewing documents
+- Downloading documents
+- Document versioning
+- Document status
+- Digital signatures where applicable
+- Tracking who signed a document
+- Tracking when a document was signed
+- Linking documents to a quotation, order, or customer
+- Keeping an audit history
+Documents should be stored securely and access should be controlled according to the user's role and relationship to the transaction.
+Once a quotation has been accepted and the transaction becomes an order, the platform should provide a dedicated order-management workflow.
+An order should contain information such as:
+- Customer
+- Product
+- Quantity
+- Unit price
+- Total price
+- Currency
+- Customization requirements
+- Supplier/manufacturer
+- Production status
+- Expected production completion date
+- Shipping information
+- Payment status
+- Documents
+- Communication history
+- Order timeline
+Customers should be able to track the progress of their order from their dashboard.
+The customer should have a clear visual timeline showing the current status of their order.
+For example:
+Quotation → Confirmation → Payment → Production → Quality Inspection → Shipping → Customs → Delivery → Completed
+Each stage should contain relevant information and timestamps.
+The system should also support internal status updates by authorized staff.
+The platform should have a powerful administrative dashboard.
+Administrators should be able to manage:
+- Products
+- Categories
+- Product specifications
+- Suppliers
+- Manufacturers
+- Customers
+- Business accounts
+- Agents
+- Inquiries
+- Quotations
+- Orders
+- Payments
+- Documents
+- Contracts
+- Support requests
+- Communication history
+- Shipping information
+- Notifications
+- System settings
+Administrators should also be able to see operational metrics and business statistics.
+For example:
+- Number of active products
+- Number of inquiries
+- Pending quotations
+- Active orders
+- Orders in production
+- Completed orders
+- Total order value
+- Most requested products
+- Most active customers
+- Conversion rate from inquiry to order
+The China-based agent should have a dedicated interface.
+The agent should be able to:
+- Create products
+- Update product information
+- Upload product images/videos
+- Add supplier information
+- Record MOQ
+- Add supplier pricing
+- Add bulk pricing
+- Record production time
+- Record customization options
+- Manage supplier communications
+- Update product availability
+- Handle customer inquiries
+- Submit supplier quotations
+- Update production information
+- Upload supplier documents
+- Add quality inspection information
+The agent should not necessarily have unrestricted administrative access. The system should use role-based permissions so that each user only has access to the functionality required for their responsibilities.
+The internal system should maintain information about manufacturers and suppliers.
+A supplier profile could include:
+- Company name
+- Contact information
+- Location
+- Product categories
+- Products supplied
+- MOQ
+- Pricing
+- Production capacity
+- Production lead time
+- Customization capabilities
+- Quality information
+- Certifications
+- Documents
+- Internal notes
+- Supplier status
+- Historical transactions
+Supplier information may be private and should not automatically be exposed to customers.
+The system should be designed so that payment can be integrated without tightly coupling the entire application to one payment provider.
+The architecture should allow future integration with Ethiopian payment methods and international payment providers.
+Payment-related information should include:
+- Payment status
+- Amount
+- Currency
+- Payment method
+- Transaction/reference ID
+- Payment date
+- Associated customer
+- Associated quotation/order
+- Verification status
+- Payment history
+The system should support manual payment verification when necessary, especially during the initial stage of the business.
+The platform should provide notifications for important events.
+Examples include:
+- New inquiry submitted
+- Inquiry response received
+- Quotation available
+- Quotation updated
+- Quotation accepted
+- Contract uploaded
+- Contract signed
+- Payment requested
+- Payment verified
+- Order status changed
+- Production completed
+- Shipment started
+- Shipment status changed
+- Delivery completed
+- Support response received
+Notifications could eventually be delivered through:
+- In-app notifications
+- Email
+- Telegram
+- SMS
+- Push notifications
+The notification architecture should be extensible so that additional channels can be added later.
+Because this platform handles commercial transactions and business documents, important actions should be auditable.
+The system should record events such as:
+- Who created a product
+- Who modified product information
+- Who changed a quotation
+- Who changed an order status
+- Who uploaded a document
+- Who signed a document
+- Who changed payment status
+- Who approved or rejected an action
+Each audit event should contain relevant information such as:
+- Actor
+- Action
+- Resource
+- Previous value where appropriate
+- New value where appropriate
+- Timestamp
+- IP/device information where appropriate
+The application should use proper RBAC rather than relying only on frontend restrictions.
+Potential roles include:
+- Super Admin
+- Operations Admin
+- China Agent
+- Customer Support
+- Finance
+- Customer
+- Business Customer
+Permissions should be granular enough that sensitive operations can be restricted appropriately.
+The application should follow a clean, scalable architecture rather than being implemented as a collection of tightly coupled features.
+The architecture should prioritize:
+- Clear separation of concerns
+- Strong typing
+- Reusable components
+- Modular business logic
+- Proper authentication and authorization
+- Validation at API boundaries
+- Centralized error handling
+- Structured logging
+- Database transactions where required
+- Background jobs for asynchronous operations
+- Proper file/document storage
+- Secure handling of customer and business data
+- Auditability
+- Scalability
+The system should be designed so that additional features such as mobile applications, additional communication channels, payment providers, shipping providers, and external supplier integrations can be added later without requiring a major rewrite.
+Customers should have a dashboard where they can see:
+- Recent inquiries
+- Active quotations
+- Pending actions
+- Current orders
+- Order statuses
+- Saved products
+- Messages
+- Documents requiring attention
+- Payment information
+- Notifications
+The dashboard should focus on helping the customer understand what is happening with their sourcing requests and what action they need to take next.
+The product detail page should be significantly more informative than a typical e-commerce product page.
+It should communicate that the product is intended for bulk procurement.
+The page should clearly show:
+- Product overview
+- Image/video gallery
+- Specifications
+- MOQ
+- Quantity-based pricing
+- Customization options
+- Manufacturing information
+- Estimated lead time
+- Shipping considerations
+- Available documents
+- Inquiry/quotation action
+- Related products
+The primary call-to-action should generally be something like:
+Request a Quote
+rather than simply:
+Add to Cart
+The application should feel like a professional B2B procurement and sourcing platform, not a consumer e-commerce store.
+The design should prioritize:
+- Clarity
+- Trust
+- Professionalism
+- Easy product comparison
+- Clear pricing and MOQ information
+- Transparent order progress
+- Strong dashboards
+- Responsive design
+- Mobile-friendly workflows
+- Simple communication with support
+The interface should avoid unnecessary complexity while still exposing the information required for serious bulk purchasing decisions.
+The system should be designed with future expansion in mind.
+Potential future capabilities include:
+- Multiple China-based agents
+- Multiple sourcing countries
+- Multiple Ethiopian sales/support agents
+- Supplier bidding
+- Customer-specific pricing
+- Negotiation workflows
+- Automated quotation generation
+- AI-assisted product search
+- AI-assisted supplier/product matching
+- Product recommendation
+- Translation between Chinese, English, and Amharic
+- Logistics and freight integrations
+- Shipment tracking
+- Customs documentation
+- Warehouse management
+- Inventory management
+- Mobile applications
+- Telegram Mini App
+- WhatsApp integration
+- Advanced analytics
+- Supplier ratings and internal supplier scoring
+The most important thing is that this application should not be designed as a normal e-commerce marketplace.
+The core workflow is:
+Discover a product → Evaluate bulk requirements → Submit an inquiry → Communicate with sourcing/support → Receive a quotation → Agree on terms → Sign documents → Make payment → Production → Quality inspection → Shipping → Delivery
+The application should support this entire business process.
+Before implementing individual features, the architecture and database design should be modeled around this workflow so that the platform represents a real-world China-to-Ethiopia B2B sourcing operation, rather than simply representing an online product catalog.
