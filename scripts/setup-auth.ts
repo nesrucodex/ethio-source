@@ -1,12 +1,17 @@
 import { generateKeyPairSync } from "node:crypto";
 
-// Run after `bun run backend`. Secrets never appear in terminal output.
+// Run after deploying functions. Secrets never appear in terminal output.
 for (const name of ["JWT_PRIVATE_KEY", "JWKS"]) {
   const result = Bun.spawnSync(
     ["bunx", "--bun", "convex", "env", "get", name],
     { stdout: "pipe", stderr: "pipe" },
   );
-  if (result.exitCode === 0 && result.stdout.toString().trim()) {
+  if (result.exitCode !== 0) {
+    throw new Error(
+      "Could not inspect authentication keys. Check deployment access before retrying.",
+    );
+  }
+  if (result.stdout.toString().trim()) {
     throw new Error(
       "Authentication keys already exist. Keep the existing pair; this script will not rotate keys.",
     );
@@ -24,8 +29,8 @@ for (const [name, value] of Object.entries({
   JWKS: JSON.stringify({ keys: [{ use: "sig", ...publicKey }] }),
 })) {
   const result = Bun.spawnSync(
-    ["bunx", "--bun", "convex", "env", "set", "--", name, value],
-    { stdout: "pipe", stderr: "pipe" },
+    ["bunx", "--bun", "convex", "env", "set", name],
+    { stdin: Buffer.from(value), stdout: "pipe", stderr: "pipe" },
   );
   if (result.exitCode !== 0)
     throw new Error(

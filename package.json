@@ -12,7 +12,8 @@
     "test:e2e": "playwright test",
     "backend": "bunx --bun convex dev",
     "format": "prettier --write src convex tests *.ts *.mjs",
-    "seed:admin": "bun scripts/seed-admin.ts"
+    "seed:admin": "bun scripts/seed-admin.ts",
+    "build:vercel": "bun scripts/vercel-build.ts"
   },
   "dependencies": {
     "@auth/core": "^0.41.3",

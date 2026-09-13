@@ -18,6 +18,61 @@ Deploy the backend with `bunx --bun convex deploy`, using the correct project. P
 
 `src/config/env.ts` validates the public values. Secret variables are only on Convex. The required payment configuration is validated by `convex/env.ts`.
 
+## Vercel and Convex quickstart
+
+The app uses Convex for persistent data, realtime subscriptions, authentication, and uploaded files. Vercel hosts Next.js. You do not need another database or to override Convex's built-in `CONVEX_CLOUD_URL` / `CONVEX_SITE_URL` settings shown in the dashboard.
+
+The configured cloud **development** deployment is `stoic-gerbil-925` in project `ethio-source`. Its backend and original local data have been deployed, including accounts, admin roles, catalog, and uploaded files. It persists independently of your laptop. The supplied development key cannot deploy a separate production database.
+
+1. In the Convex dashboard, create/select the project's **Production** deployment. Generate its production deploy key with deployment permission. Keep it in a password manager and Vercel; never commit it or prefix it with `NEXT_PUBLIC_`. Revoke and replace the development key shared in chat, and update `.env.local` with its replacement.
+2. Push this Git repository to your Git hosting account and import it at Vercel. The repository currently has no remote configured. Select the Next.js framework; `vercel.json` supplies the install and build commands.
+3. Add these Vercel variables, scoped to **Production**:
+
+   | Variable | Value |
+   | --- | --- |
+   | `CONVEX_DEPLOY_KEY` | Production deploy key from Convex |
+   | `NEXT_PUBLIC_SITE_URL` | Canonical HTTPS Vercel/custom-domain URL |
+
+   The build command `bun run build:vercel` runs `convex deploy --cmd 'bun run build' --cmd-url-env-var-name NEXT_PUBLIC_CONVEX_URL`. Convex supplies the matching database URL during the build. Do not hardcode the development URL in Vercel. `NEXT_PUBLIC_CONVEX_SITE_URL` is optional operator information; if set, use the production HTTP Actions URL.
+4. For one-time production setup from your machine, create an ignored `.env.production.local` containing **all** of the following, replacing the placeholders:
+
+   ```dotenv
+   CONVEX_DEPLOYMENT=prod:YOUR-PRODUCTION-DEPLOYMENT
+   CONVEX_DEPLOY_KEY=YOUR-PRODUCTION-DEPLOY-KEY
+   NEXT_PUBLIC_CONVEX_URL=https://YOUR-PRODUCTION-DEPLOYMENT.convex.cloud
+   NEXT_PUBLIC_CONVEX_SITE_URL=https://YOUR-PRODUCTION-DEPLOYMENT.convex.site
+   NEXT_PUBLIC_SITE_URL=https://YOUR-VERCEL-PROJECT.vercel.app
+   ```
+
+   ```sh
+   make deploy ENV_FILE=.env.production.local
+   make auth-setup ENV_FILE=.env.production.local
+   make site-url ENV_FILE=.env.production.local SITE_URL=https://YOUR-VERCEL-PROJECT.vercel.app
+   make seed-admin ENV_FILE=.env.production.local
+   ```
+
+   `make deploy` deploys Convex and builds Next.js locally; it does not publish the frontend to Vercel. `make auth-setup` generates a fresh signing pair once, refuses to rotate existing keys, and aborts on access failures. Seed-admin prompts for credentials; there are no default passwords. Existing imported password accounts keep their passwords. Auth keys and integration environment variables are deployment-specific and are not included in data exports.
+5. Deploy in Vercel. Verify sign-in, admin access, product updates from a second browser, and uploaded images. Changing public URLs requires rebuilding the frontend. Configure recovery, payment, and feed secrets directly on production Convex as described below.
+
+For Vercel Preview, configure a separate development or preview key scoped only to Preview, plus its site URL and authentication configuration. Never expose production data to preview builds. The build script rejects a production key in Vercel Preview and a development key in Vercel Production.
+
+This follows the official [Convex Vercel deployment guide](https://docs.convex.dev/production/hosting/vercel).
+
+### Database migration and backups
+
+Schema, indexes, and functions are deployed by `make cloud-push` for development and `make deploy` for a deployment selected by key. Existing records persist across code deployments. Data transfer is a separate explicit operation:
+
+```sh
+make backup SNAPSHOT=backups/cloud-dev.zip
+make migrate ENV_FILE=.env.production.local SNAPSHOT=backups/cloud-dev.zip
+```
+
+Backups include file storage. Imports preserve IDs and references and refuse to overwrite nonempty tables; there are no automatic replacement flags. Run imports against an empty destination before seeding its admin or catalog. A full snapshot includes all accounts and authentication records: only migrate development records to production if you intend to retain them. Otherwise create a fresh production admin and approved catalog. Stop writes during the final export/import window so the destination does not miss changes. See [Convex snapshot import](https://docs.convex.dev/database/import-export/import).
+
+`backups/`, `.env*` (except `.env.example`), and `.vercel/` are ignored by Git. Store a protected off-machine copy of backups. The initial local snapshot is `backups/local-before-cloud.zip`; `.env.local-backup` retains the old local connection. Neither was deleted by migration. To work against that local database again, restore those connection settings to `.env.local`, remove the cloud key from that file/environment, and start `make backend`.
+
+The Makefile defaults to `.env.local`; pass `ENV_FILE=.env.production.local` deliberately for production. Keep every deployment's key and public URLs together in that file. A missing environment file fails before running a command.
+
 ## Authentication and recovery
 
 Convex Auth owns password hashing, token generation, session refresh, and login throttling. Passwords require at least ten characters. Roles live in a separate `admins` table keyed by user ID. Customer queries filter by the authenticated user ID; no browser-supplied user ID is trusted for order ownership.

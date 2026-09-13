@@ -7,26 +7,30 @@ A responsive Next.js storefront and protected admin dashboard for cross-border s
 Requires Bun 1.3.14 or newer.
 
 ```sh
-bun install --frozen-lockfile
-bun run backend
+make install
+cp .env.example .env.local
 ```
 
-Keep the backend running. On a fresh checkout, Convex creates `.env.local` with local deployment URLs. In a second terminal:
+Add your development `CONVEX_DEPLOY_KEY` to the ignored `.env.local` (or authenticate with the Convex CLI). The example selects the persistent cloud development database `stoic-gerbil-925`. If `.env.local` already exists, keep it instead of copying over it.
 
 ```sh
-bun scripts/setup-auth.ts
-bunx --bun convex env set SITE_URL http://localhost:3000
-bunx --bun convex run seed:catalog
-bun run dev
+make cloud-push
+make dev
 ```
 
-Open http://localhost:3000. Authentication keys and sample catalog are already configured in the development environment used to build this project. Do not rerun key setup against that existing deployment. The script refuses to replace an existing key pair.
+Open http://localhost:3000. Run `make backend` in another terminal when editing backend functions; cloud data remains available when your computer is off. `make auth-setup` is only for a fresh deployment without signing keys, and refuses to replace existing keys. `make seed-demo` optionally adds illustrative catalog data to a fresh database.
 
-Without a Convex URL the storefront shows a clearly marked preview collection; accounts and checkout are disabled. With local Convex running, accounts, catalog changes, and admin workflows work against real local data. Sample prices and stock are not a live supplier feed.
+The original local database and uploaded files were migrated to the cloud development deployment. Local rollback settings are retained in ignored `.env.local-backup`; the ignored snapshot is `backups/local-before-cloud.zip`. Existing accounts and admin roles were preserved. Sign in again after switching databases.
+
+Without a Convex URL the storefront shows a preview collection; accounts and checkout are disabled. Sample prices and stock are not a live supplier feed.
+
+## Deploy to Vercel
+
+See [the Vercel and Convex setup](docs/DEPLOYMENT.md#vercel-and-convex-quickstart) for exact production environment variables and first-time setup. `vercel.json` builds the frontend with the URL supplied by Convex and deploys the backend. Run `make help` for deployment, migration, and backup commands. Production uses a separate Convex production deployment and key; the current cloud deployment is development.
 
 ## Administrator access
 
-Keep `bun run backend` running, then seed an administrator:
+Deploy the backend functions, then seed an administrator:
 
 ```sh
 bun run seed:admin

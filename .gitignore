@@ -9,3 +9,8 @@ test-results/
 
 
 .next-build/
+
+# Deployment credentials and database snapshots
+.vercel/
+backups/
+*.snapshot.zip
