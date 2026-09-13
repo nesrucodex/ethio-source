@@ -21,9 +21,9 @@ type Viewer = {
 type Catalog = {
   products: Doc<"products">[] | undefined;
   rates:
-    | { usd: number; cny: number; markup: number; source: string }
-    | null
-    | undefined;
+  | { usd: number; cny: number; markup: number; source: string }
+  | null
+  | undefined;
   viewer: Viewer | undefined;
   connected: boolean;
 };
