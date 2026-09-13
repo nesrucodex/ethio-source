@@ -2,10 +2,22 @@ import { afterEach, expect, test, vi } from "vitest";
 import { convexTest } from "convex-test";
 import schema from "../convex/schema";
 import { ChapaClient } from "../src/services/api/chapa";
+import { paymentEnv } from "../convex/env";
 const modules = import.meta.glob("../convex/**/*.{ts,js}");
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
+});
+
+test("payment configuration accepts a short Chapa webhook secret but rejects an empty one", () => {
+  vi.stubEnv("CHAPA_SECRET_KEY", "test-secret");
+  vi.stubEnv("CHAPA_WEBHOOK_SECRET", "test-hook");
+  vi.stubEnv("SITE_URL", "https://store.example");
+  vi.stubEnv("CONVEX_SITE_URL", "https://example.convex.site");
+  vi.stubEnv("CHAPA_MODE", "test");
+  expect(paymentEnv().CHAPA_WEBHOOK_SECRET).toBe("test-hook");
+  vi.stubEnv("CHAPA_WEBHOOK_SECRET", "");
+  expect(() => paymentEnv()).toThrow();
 });
 
 test("webhook rejects missing and incorrect signatures before verification", async () => {
@@ -54,14 +66,12 @@ test("webhook accepts a valid raw-body signature but ignores unknown orders", as
 test("Chapa checkout validates redirect origin", async () => {
   vi.stubGlobal(
     "fetch",
-    vi
-      .fn()
-      .mockResolvedValue(
-        Response.json({
-          status: "success",
-          data: { checkout_url: "https://untrusted.example/payment" },
-        }),
-      ),
+    vi.fn().mockResolvedValue(
+      Response.json({
+        status: "success",
+        data: { checkout_url: "https://untrusted.example/payment" },
+      }),
+    ),
   );
   await expect(
     new ChapaClient("test-secret").initialize({
@@ -78,20 +88,18 @@ test("Chapa checkout validates redirect origin", async () => {
 });
 
 test("Chapa verification validates required fields and normalizes amount", async () => {
-  const fetchMock = vi
-    .fn()
-    .mockResolvedValue(
-      Response.json({
+  const fetchMock = vi.fn().mockResolvedValue(
+    Response.json({
+      status: "success",
+      data: {
+        tx_ref: "ES-test",
+        amount: "100.00",
+        currency: "ETB",
         status: "success",
-        data: {
-          tx_ref: "ES-test",
-          amount: "100.00",
-          currency: "ETB",
-          status: "success",
-          mode: "test",
-        },
-      }),
-    );
+        mode: "test",
+      },
+    }),
+  );
   vi.stubGlobal("fetch", fetchMock);
   const data = await new ChapaClient("test-secret").verify("ES-test");
   expect(data.amount).toBe(100);

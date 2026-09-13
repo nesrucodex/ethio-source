@@ -92,7 +92,7 @@ bunx --bun convex env set CHAPA_MODE test
 bunx --bun convex env set SITE_URL https://your-store.example
 ```
 
-`CHAPA_WEBHOOK_SECRET` must contain at least 16 characters. Register this URL in the Chapa dashboard:
+`CHAPA_WEBHOOK_SECRET` must be nonempty and match the secret hash entered in the Chapa dashboard exactly. Chapa accepts any string; a long random value is recommended. Register this URL in the Chapa dashboard:
 
 ```text
 https://YOUR-DEPLOYMENT.convex.site/payments/chapa/webhook
@@ -104,7 +104,7 @@ The checkout URL returned by Chapa must be HTTPS under `chapa.co`. The browser r
 
 Reservation expiry releases inventory after 30 minutes. A payment arriving afterward is flagged for review. Payments already marked paid or review are idempotent. Shipment transitions require verified payment. Manual review/refunds require a human merchant action; never mark an order paid just because a customer provides a receipt or returns from a checkout page.
 
-Provider test credentials were not supplied, so no real Chapa transaction has been initialized, paid, refunded, or verified. Run the full merchant sandbox round trip, retry callbacks, validate current API response shapes, and confirm supported local payment methods before switching `CHAPA_MODE` to `live` with matching live credentials. The schema fails closed if the provider omits expected verification fields.
+Chapa test credentials are configured on production Convex with `CHAPA_MODE=test`. A sandbox checkout was initialized successfully, and signed/unsigned webhook probes returned 200/401 as expected. A complete provider payment, refund, and settlement round trip has not yet been verified. The hosted checkout integration uses only the secret API key and webhook secret; public and encryption keys are not required. Register `https://glorious-bullfrog-250.convex.site/payments/chapa/webhook` in the Chapa dashboard using the matching configured secret hash. Run the full merchant sandbox round trip, retry callbacks, validate current API response shapes, and confirm supported local payment methods before switching `CHAPA_MODE` to `live` with matching live credentials. The schema fails closed if the provider omits expected verification fields.
 
 ## Supplier feed contract
 
