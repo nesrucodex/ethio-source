@@ -1,5 +1,7 @@
 # EthioSource
 
+Production: [ethio-source.vercel.app](https://ethio-source.vercel.app)
+
 A responsive Next.js storefront and protected admin dashboard for cross-border shopping from China to Ethiopia. Uses Bun, Convex, Zustand, shadcn/ui, and Motion. Built from the official `create-next-app` starter. The web app supports home-screen installation as a PWA; native mobile apps are intentionally excluded from the current scope.
 
 ## Run locally
