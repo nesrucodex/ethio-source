@@ -52,6 +52,50 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 describe("Commerce security and integrity", () => {
+  test("delivery autofill uses only the account's latest paid order", async () => {
+    const { t, buyer, productId, otherId } = await setup();
+    await expect(buyer.query(api.users.deliveryDetails)).resolves.toBeNull();
+    await expect(t.query(api.users.deliveryDetails)).rejects.toThrow();
+    const first = await buyer.mutation(api.orders.create, {
+      ...details,
+      items: [{ productId, quantity: 1 }],
+    });
+    await expect(buyer.query(api.users.deliveryDetails)).resolves.toBeNull();
+    await t.run((ctx) => ctx.db.patch(first, { paymentStatus: "paid" }));
+    const saved = { phone: details.phone, address: details.address };
+    await expect(buyer.query(api.users.deliveryDetails)).resolves.toEqual(
+      saved,
+    );
+    vi.advanceTimersByTime(1);
+    const next = {
+      ...details,
+      phone: "0921234567",
+      address: "Addis Ababa, Kirkos, building 20",
+    };
+    const second = await buyer.mutation(api.orders.create, {
+      ...next,
+      items: [{ productId, quantity: 1 }],
+    });
+    await expect(buyer.query(api.users.deliveryDetails)).resolves.toEqual(
+      saved,
+    );
+    await t.run((ctx) => ctx.db.patch(second, { paymentStatus: "failed" }));
+    await expect(buyer.query(api.users.deliveryDetails)).resolves.toEqual(
+      saved,
+    );
+    await t.run((ctx) => ctx.db.patch(second, { paymentStatus: "paid" }));
+    await expect(buyer.query(api.users.deliveryDetails)).resolves.toEqual({
+      phone: next.phone,
+      address: next.address,
+    });
+    await expect(
+      t
+        .withIdentity({ subject: `${otherId}|other` })
+        .query(api.users.deliveryDetails),
+    ).resolves.toBeNull();
+    await t.finishAllScheduledFunctions(() => vi.runAllTimers());
+  });
+
   test("checkout returns Chapa's URL, clears old errors, and uses an order-specific return page", async () => {
     const { t, buyer, productId } = await setup();
     vi.stubEnv("CHAPA_WEBHOOK_SECRET", "test-hook");

@@ -1,6 +1,6 @@
 import { internal } from "./_generated/api";
 import { paginationOptsValidator } from "convex/server";
-import { requireAdmin } from "./lib/access";
+import { requireAdmin, requireUser } from "./lib/access";
 import {
   action,
   query,
@@ -186,5 +186,25 @@ export const create = action({
         "Could not create this user. The email may already be registered. Refresh and try again.",
       );
     }
+  },
+});
+
+// Reuse verified delivery details without maintaining a second customer profile.
+export const deliveryDetails = query({
+  args: {},
+  returns: v.union(
+    v.null(),
+    v.object({ phone: v.string(), address: v.string() }),
+  ),
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
+    const order = await ctx.db
+      .query("orders")
+      .withIndex("by_user_payment", (q) =>
+        q.eq("userId", userId).eq("paymentStatus", "paid"),
+      )
+      .order("desc")
+      .first();
+    return order ? { phone: order.phone, address: order.address } : null;
   },
 });

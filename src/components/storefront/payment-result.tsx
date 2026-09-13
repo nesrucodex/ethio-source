@@ -24,11 +24,13 @@ function PaymentLoading() {
   return (
     <LoadingRegion
       label="Loading payment status"
-      className="mx-auto w-full max-w-lg py-16"
+      className="mx-auto w-full max-w-md rounded-2xl border p-8"
     >
-      <Skeleton className="mx-auto mb-6 size-16 rounded-2xl" />
-      <Skeleton className="mx-auto mb-4 h-9 w-64" />
-      <Skeleton className="mx-auto h-16 w-full" />
+      <Skeleton className="mb-7 size-11 rounded-full" />
+      <Skeleton className="mb-4 h-8 w-56" />
+      <Skeleton className="mb-7 h-12 w-full" />
+      <Skeleton className="mb-7 h-20 w-full" />
+      <Skeleton className="h-11 w-full rounded-full" />
     </LoadingRegion>
   );
 }
@@ -105,7 +107,7 @@ function PaymentStatus({ reference }: { reference: string }) {
         ? ShieldCheck
         : Clock;
   const title = paid
-    ? "Payment successful."
+    ? "Payment received"
     : review
       ? "Your payment needs a review."
       : order.paymentStatus === "expired"
@@ -118,7 +120,7 @@ function PaymentStatus({ reference }: { reference: string }) {
               ? "Checking your payment…"
               : "Payment awaiting confirmation.";
   const description = paid
-    ? "Your payment is verified and your order is confirmed. Follow its progress in your orders."
+    ? "Your order is confirmed. Follow its delivery progress in your orders."
     : review
       ? "Our team will check your payment and order. Please don’t make another payment for this order."
       : failed
@@ -150,27 +152,34 @@ function PaymentStatus({ reference }: { reference: string }) {
 
   return (
     <div className="shell page-content">
-      <Card className="mx-auto max-w-lg rounded-3xl shadow-sm">
-        <CardContent className="flex flex-col items-center gap-6 px-6 py-10 text-center sm:px-10">
+      <Card className="mx-auto max-w-md rounded-2xl py-0 shadow-none">
+        <CardContent className="flex flex-col gap-7 p-6 sm:p-8">
           <div
-            className={`flex size-16 items-center justify-center rounded-2xl ${failed || checkoutFailed ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}
+            className={`flex size-11 items-center justify-center rounded-full ${failed || checkoutFailed ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}
           >
-            <Icon className="size-8" strokeWidth={1.5} aria-hidden="true" />
+            <Icon className="size-6" strokeWidth={1.5} aria-hidden="true" />
           </div>
           <div role="status" aria-live="polite" className="space-y-3">
-            <p className="eyebrow">YOUR PAYMENT</p>
-            <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
             <p className="text-sm leading-6 text-muted-foreground">
               {description}
             </p>
           </div>
-          <div className="w-full rounded-2xl bg-muted/50 p-4">
-            <p className="text-2xl font-semibold tracking-tight">
-              {money(order.total)}
-            </p>
-            <p className="mt-2 break-all text-xs text-muted-foreground">
-              Reference: {order.reference}
-            </p>
+          <div className="border-y py-4">
+            <dl className="flex items-baseline justify-between gap-4">
+              <dt className="text-sm text-muted-foreground">
+                {paid ? "Amount paid" : "Order total"}
+              </dt>
+              <dd className="text-xl font-semibold tracking-tight tabular-nums">
+                {money(order.total)}
+              </dd>
+            </dl>
+            <details className="mt-3 text-xs text-muted-foreground">
+              <summary className="cursor-pointer rounded-sm py-1 focus-visible:outline-2 focus-visible:outline-ring">
+                Payment reference
+              </summary>
+              <p className="mt-2 break-all select-all">{order.reference}</p>
+            </details>
           </div>
           {error && !paid && !review ? (
             <p role="alert" className="text-sm text-destructive">
@@ -179,7 +188,7 @@ function PaymentStatus({ reference }: { reference: string }) {
           ) : null}
           <div className="flex w-full flex-col gap-3">
             <Button asChild size="lg">
-              <Link href="/orders">Continue to your orders</Link>
+              <Link href="/orders">View your orders</Link>
             </Button>
             {!paid && !review && order.checkoutStarted ? (
               <Button

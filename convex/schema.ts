@@ -17,6 +17,7 @@ export default defineSchema({
   rates: defineTable(rateFields).index("by_key", ["key"]),
   orders: defineTable(orderFields)
     .index("by_user", ["userId"])
+    .index("by_user_payment", ["userId", "paymentStatus"])
     .index("by_reference", ["reference"])
     .index("by_payment", ["paymentStatus"]),
   syncLogs: defineTable({

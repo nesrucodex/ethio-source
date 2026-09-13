@@ -1,11 +1,9 @@
 "use client";
 import { ProductGallery } from "./product-gallery";
 import Link from "next/link";
-import { ArrowLeft, ShoppingBag, ShieldCheck, Truck } from "lucide-react";
-import { toast } from "sonner";
+import { ArrowLeft, ShieldCheck, Truck } from "lucide-react";
 import { useCatalog, useTranslation } from "@/components/providers";
-import { useShop } from "@/stores/shop";
-import { Button } from "@/components/ui/button";
+import { ProductQuantity } from "./product-quantity";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState, LoadingCards } from "@/components/shared/states";
 import { ProductCard } from "./product-card";
@@ -13,7 +11,6 @@ import { money, priceInBirr } from "@/lib/commerce";
 export function ProductDetail({ slug }: { slug: string }) {
   const { products, rates } = useCatalog();
   const { t, locale } = useTranslation();
-  const add = useShop((s) => s.add);
   if (!products)
     return (
       <div className="shell page-content">
@@ -53,17 +50,13 @@ export function ProductDetail({ slug }: { slug: string }) {
             {available ? `${available} ${t("available")}` : t("soldOut")}
           </Badge>
           <p className="detail-description">{p.description[locale]}</p>
-          <Button
-            size="lg"
-            disabled={!available || !rates}
-            onClick={() => {
-              add(p._id, available);
-              toast.success(t("add"));
-            }}
+          <ProductQuantity
+            productId={p._id}
+            name={p.name[locale]}
+            max={rates ? available : 0}
           >
-            <ShoppingBag data-icon="inline-start" />
             {available ? t("add") : t("soldOut")}
-          </Button>
+          </ProductQuantity>
           <div className="detail-notes">
             <p>
               <ShieldCheck size={18} />

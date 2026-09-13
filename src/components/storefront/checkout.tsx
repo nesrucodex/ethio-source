@@ -1,7 +1,8 @@
 "use client";
+import { FormLoading } from "@/components/shared/loading";
 import { FormSection } from "@/components/shared/form-section";
 import { useState } from "react";
-import { useMutation, useAction } from "convex/react";
+import { useMutation, useAction, useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
@@ -25,8 +26,7 @@ export function Checkout() {
         </Notice>
       </div>
     );
-  if (viewer === undefined)
-    return <p className="shell page-content">Loading your account…</p>;
+  if (viewer === undefined) return <CheckoutLoading />;
   if (!viewer)
     return (
       <EmptyState
@@ -36,9 +36,25 @@ export function Checkout() {
         action="Sign in to continue"
       />
     );
-  return <CheckoutForm />;
+  return <SavedCheckout key={viewer.id} />;
 }
-function CheckoutForm() {
+function CheckoutLoading() {
+  return (
+    <div className="shell page-content">
+      <FormLoading label="Preparing checkout" />
+    </div>
+  );
+}
+function SavedCheckout() {
+  const delivery = useQuery(api.users.deliveryDetails);
+  if (delivery === undefined) return <CheckoutLoading />;
+  return <CheckoutForm delivery={delivery} />;
+}
+function CheckoutForm({
+  delivery,
+}: {
+  delivery: { phone: string; address: string } | null;
+}) {
   const { viewer } = useCatalog();
   const { t } = useTranslation();
   const { items, invalid } = useCart();
@@ -129,6 +145,7 @@ function CheckoutForm() {
                   name="phone"
                   type="tel"
                   autoComplete="tel"
+                  defaultValue={delivery?.phone}
                   placeholder="0911234567"
                   pattern="(\+?251[79][0-9]{8}|0[79][0-9]{8})"
                   required
@@ -142,6 +159,7 @@ function CheckoutForm() {
                   id="address"
                   name="address"
                   autoComplete="street-address"
+                  defaultValue={delivery?.address}
                   placeholder="Addis Ababa, Bole, building or nearby landmark"
                   minLength={8}
                   maxLength={500}
@@ -149,6 +167,12 @@ function CheckoutForm() {
                 />
               </Field>
             </FormSection>
+            {delivery ? (
+              <p className="text-xs leading-6 text-muted-foreground">
+                Delivery details from your last paid order. You can change them
+                for this delivery.
+              </p>
+            ) : null}
             <Notice title="Pay with Chapa">
               Available local payment methods are shown on Chapa’s secure
               checkout. Your order is confirmed only after payment verification.
