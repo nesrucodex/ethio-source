@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#fffefa"/>
+  <rect x="24" y="24" width="1152" height="582" rx="32" fill="#264d3b"/>
+  <g transform="translate(80 72)">
+    <rect width="64" height="64" rx="15" fill="#fffefa"/>
+    <text x="15" y="48" fill="#264d3b" font-family="Arial,sans-serif" font-size="50">e</text>
+    <path d="M40 11.5h13v13M53 11.5 39 25.5" fill="none" stroke="#264d3b" stroke-width="3.5"/>
+  </g>
+  <text x="166" y="118" fill="#fffefa" font-family="Arial,sans-serif" font-size="40" font-weight="700" letter-spacing="-1">EthioSource</text>
+  <g fill="#fffefa" font-family="Arial,sans-serif" font-size="86" font-weight="700" letter-spacing="-3">
+    <text x="80" y="286">Good things.</text>
+    <text x="80" y="388">Without borders.</text>
+  </g>
+  <text x="84" y="460" fill="#dbe6da" font-family="Arial,sans-serif" font-size="27">Thoughtfully sourced from China. Brought to Ethiopia.</text>
+  <path d="M84 526H1116" stroke="#688573" stroke-width="1"/>
+  <text x="84" y="564" fill="#dbe6da" font-family="Arial,sans-serif" font-size="22">ethio-source.vercel.app</text>
+  <g transform="translate(1012 548)">
+    <rect width="32" height="8" rx="4" fill="#a2b29c"/>
+    <rect x="36" width="32" height="8" rx="4" fill="#d7b65a"/>
+    <rect x="72" width="32" height="8" rx="4" fill="#bd6e59"/>
+  </g>
+</svg>
