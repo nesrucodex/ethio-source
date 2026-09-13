@@ -1,4 +1,6 @@
 "use client";
+import Link from "next/link";
+import { paymentMessage } from "@/lib/payment-message";
 import { ListLoading } from "@/components/shared/loading";
 import { useQuery, useAction } from "convex/react";
 import { useState } from "react";
@@ -74,8 +76,13 @@ function OrderCard({ order: o }: { order: Doc<"orders"> }) {
         await recheck({ id: o._id });
         toast.success("Payment status checked");
       }
-    } catch {
-      toast.error("Could not reach the payment provider. Please try again.");
+    } catch (error) {
+      toast.error(
+        paymentMessage(
+          error,
+          "We couldn’t confirm the payment. Please try again shortly.",
+        ),
+      );
     } finally {
       setBusy(false);
     }
@@ -155,6 +162,11 @@ function OrderCard({ order: o }: { order: Doc<"orders"> }) {
         ) : null}
       </CardContent>
       <CardFooter className="gap-3">
+        <Button variant="outline" asChild>
+          <Link href={"/payment/" + encodeURIComponent(o.reference)}>
+            View payment result
+          </Link>
+        </Button>
         {o.paymentStatus === "pending" ? (
           <Button disabled={busy} onClick={() => void payment(true)}>
             Continue payment

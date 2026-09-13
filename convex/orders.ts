@@ -32,6 +32,42 @@ export const mine = query({
     return Promise.all(orders.map((order) => resolveOrderPhotos(ctx, order)));
   },
 });
+export const paymentSummary = query({
+  args: { reference: v.string() },
+  returns: v.union(
+    v.null(),
+    v.object({
+      id: v.id("orders"),
+      reference: v.string(),
+      total: v.number(),
+      paymentStatus,
+      expiresAt: v.number(),
+      checkoutStarted: v.boolean(),
+      paymentError: v.optional(v.string()),
+    }),
+  ),
+  handler: async (ctx, { reference }) => {
+    const userId = await requireUser(ctx);
+    if (reference.length > 100) return null;
+    const id = ctx.db.normalizeId("orders", reference);
+    const order = id
+      ? await ctx.db.get(id)
+      : await ctx.db
+          .query("orders")
+          .withIndex("by_reference", (q) => q.eq("reference", reference))
+          .unique();
+    if (!order || order.userId !== userId) return null;
+    return {
+      id: order._id,
+      reference: order.reference,
+      total: order.total,
+      paymentStatus: order.paymentStatus,
+      expiresAt: order.expiresAt,
+      checkoutStarted: !!order.checkoutUrl,
+      paymentError: order.paymentError,
+    };
+  },
+});
 export const all = query({
   args: {},
   returns: v.array(orderDoc),
@@ -169,7 +205,7 @@ export const checkout = internalMutation({
     const order = await ctx.db.get(id);
     if (!order || order.paymentStatus !== "pending") return null;
     await ctx.db.patch(id, {
-      ...(url ? { checkoutUrl: url } : {}),
+      ...(url ? { checkoutUrl: url, paymentError: undefined } : {}),
       ...(error ? { paymentError: error } : {}),
     });
     return null;

@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { EmptyState, Notice } from "@/components/shared/states";
 import { OrderSummary, useCart } from "./cart";
 import { Loader2, ArrowUpRight } from "lucide-react";
+import { paymentMessage } from "@/lib/payment-message";
 export function Checkout() {
   const { viewer, connected } = useCatalog();
   if (!connected)
@@ -47,7 +48,7 @@ function CheckoutForm() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-  if (!items.length) return <EmptyState title="Your bag is empty" />;
+  if (!items.length && !busy) return <EmptyState title="Your bag is empty" />;
   return (
     <div className="shell page-content">
       <div className="page-heading">
@@ -76,17 +77,16 @@ function CheckoutForm() {
                 phone: String(form.get("phone")),
                 address: String(form.get("address")),
               });
-              clear();
               const url = await start({ id });
+              clear();
               window.location.assign(url);
             } catch (err) {
               if (id) {
-                router.push("/orders");
+                clear();
+                router.push("/payment/" + encodeURIComponent(id));
               } else
                 setError(
-                  err instanceof Error
-                    ? err.message
-                    : "Checkout failed. Please try again.",
+                  paymentMessage(err, "Checkout failed. Please try again."),
                 );
             } finally {
               setBusy(false);

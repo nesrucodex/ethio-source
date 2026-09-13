@@ -21,9 +21,9 @@ export const start = action({
     )
       throw new ConvexError("This checkout has expired or is already paid");
     if (order.checkoutUrl) return order.checkoutUrl;
-    const env = paymentEnv();
     try {
-      const [first_name, ...rest] = order.name.split(" ");
+      const env = paymentEnv();
+      const [first_name, ...rest] = order.name.trim().split(/\s+/);
       const url = await new ChapaClient(env.CHAPA_SECRET_KEY).initialize({
         amount: order.total.toFixed(2),
         currency: "ETB",
@@ -32,7 +32,8 @@ export const start = action({
         last_name: rest.join(" ") || first_name,
         tx_ref: order.reference,
         callback_url: env.CONVEX_SITE_URL + "/payments/chapa/callback",
-        return_url: env.SITE_URL + "/orders?payment=return",
+        return_url:
+          env.SITE_URL + "/payment/" + encodeURIComponent(order.reference),
       });
       await ctx.runMutation(internal.orders.checkout, { id, url });
       return url;

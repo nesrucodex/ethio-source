@@ -20,6 +20,26 @@ test("payment configuration accepts a short Chapa webhook secret but rejects an 
   expect(() => paymentEnv()).toThrow();
 });
 
+test("payment configuration reads Convex environment properties without enumerating them", () => {
+  const original = process.env;
+  const values: Record<string, string> = {
+    CHAPA_SECRET_KEY: "test-secret",
+    CHAPA_WEBHOOK_SECRET: "test-hook",
+    SITE_URL: "https://store.example",
+    CONVEX_SITE_URL: "https://example.convex.site",
+    CHAPA_MODE: "test",
+  };
+  process.env = new Proxy(
+    { NODE_ENV: original.NODE_ENV },
+    { get: (_, key) => values[String(key)] },
+  );
+  try {
+    expect(paymentEnv()).toEqual(values);
+  } finally {
+    process.env = original;
+  }
+});
+
 test("webhook rejects missing and incorrect signatures before verification", async () => {
   const t = convexTest(schema, modules);
   vi.stubEnv("CHAPA_WEBHOOK_SECRET", "local-test-webhook-secret");

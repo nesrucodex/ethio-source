@@ -8,5 +8,11 @@ export function paymentEnv() {
       CONVEX_SITE_URL: z.url(),
       CHAPA_MODE: z.enum(["test", "live"]).default("test"),
     })
-    .parse(process.env);
+    .parse({
+      CHAPA_SECRET_KEY: process.env.CHAPA_SECRET_KEY,
+      CHAPA_WEBHOOK_SECRET: process.env.CHAPA_WEBHOOK_SECRET,
+      SITE_URL: process.env.SITE_URL,
+      CONVEX_SITE_URL: process.env.CONVEX_SITE_URL,
+      CHAPA_MODE: process.env.CHAPA_MODE,
+    });
 }

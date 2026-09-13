@@ -98,7 +98,7 @@ bunx --bun convex env set SITE_URL https://your-store.example
 https://YOUR-DEPLOYMENT.convex.site/payments/chapa/webhook
 ```
 
-The same webhook secret must be configured on both sides. The handler verifies `x-chapa-signature` as an HMAC-SHA256 over the raw request body before processing. It then fetches authoritative transaction details. It validates reference, mode, amount, currency, and success status. An invalid signature returns 401. Transient verification failures return non-success so the provider can retry. The callback endpoint also re-verifies via Chapa; query parameters cannot directly confirm an order.
+The same webhook secret must be configured on both sides. The handler verifies `x-chapa-signature` as an HMAC-SHA256 over the raw request body before processing. It then fetches authoritative transaction details. It validates reference, mode, amount, currency, and success status. An invalid signature returns 401. Transient verification failures return non-success so the provider can retry. The callback endpoint also re-verifies via Chapa; query parameters cannot directly confirm an order. New Chapa checkouts return to `/payment/[reference]`. This account-protected page checks the stored order, requests provider verification, and reactively displays success, failure, expiry, pending confirmation, or manual review before offering a link to orders. Payment settings are read individually from Convex's environment proxy; passing the whole proxy into an object validator loses those values.
 
 The checkout URL returned by Chapa must be HTTPS under `chapa.co`. The browser redirects there only after the backend creates an order using server-side price, margin, delivery, and inventory rules.
 

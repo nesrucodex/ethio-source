@@ -49,8 +49,75 @@ beforeEach(() => {
 afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
 });
 describe("Commerce security and integrity", () => {
+  test("checkout returns Chapa's URL, clears old errors, and uses an order-specific return page", async () => {
+    const { t, buyer, productId } = await setup();
+    vi.stubEnv("CHAPA_WEBHOOK_SECRET", "test-hook");
+    vi.stubEnv("SITE_URL", "https://store.example");
+    vi.stubEnv("CONVEX_SITE_URL", "https://example.convex.site");
+    const fetchMock = vi.fn().mockResolvedValue(
+      Response.json({
+        status: "success",
+        data: { checkout_url: "https://checkout.chapa.co/test" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    const id = await buyer.mutation(api.orders.create, {
+      ...details,
+      items: [{ productId, quantity: 1 }],
+    });
+    await t.mutation(internal.orders.checkout, {
+      id,
+      error: "Previous failure",
+    });
+    await expect(buyer.action(api.payments.start, { id })).resolves.toBe(
+      "https://checkout.chapa.co/test",
+    );
+    const order = await t.run((ctx) => ctx.db.get(id));
+    const sent = JSON.parse(fetchMock.mock.calls[0][1].body);
+    expect(sent.return_url).toBe(
+      "https://store.example/payment/" + order!.reference,
+    );
+    expect(order!.paymentError).toBeUndefined();
+    await buyer.action(api.payments.start, { id });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    await t.finishAllScheduledFunctions(() => vi.runAllTimers());
+  });
+
+  test("payment result queries enforce ownership for references and IDs", async () => {
+    const { t, buyer, productId, otherId } = await setup();
+    const id = await buyer.mutation(api.orders.create, {
+      ...details,
+      items: [{ productId, quantity: 1 }],
+    });
+    const order = await t.run((ctx) => ctx.db.get(id));
+    const other = t.withIdentity({ subject: `${otherId}|test-session` });
+    for (const reference of [id, order!.reference]) {
+      expect(
+        await buyer.query(api.orders.paymentSummary, { reference }),
+      ).toMatchObject({ id, paymentStatus: "pending" });
+      expect(
+        await other.query(api.orders.paymentSummary, { reference }),
+      ).toBeNull();
+      await expect(
+        t.query(api.orders.paymentSummary, { reference }),
+      ).rejects.toThrow();
+    }
+    await t.mutation(internal.orders.settle, {
+      reference: order!.reference,
+      amount: order!.total,
+      currency: "ETB",
+      success: true,
+    });
+    expect(
+      await buyer.query(api.orders.paymentSummary, {
+        reference: order!.reference,
+      }),
+    ).toMatchObject({ paymentStatus: "paid" });
+    await t.finishAllScheduledFunctions(() => vi.runAllTimers());
+  });
   test("rejects unauthenticated checkout and customer admin mutations", async () => {
     const { t, buyer, productId } = await setup();
     await expect(
