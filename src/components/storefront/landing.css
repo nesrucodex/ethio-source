@@ -7,22 +7,16 @@
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 5%;
-  padding-top: 2rem;
-  padding-bottom: 3rem;
+  padding-top: 3.5rem;
+  padding-bottom: 4.5rem;
 }
 .landing-hero-copy {
   padding: 2rem 0;
 }
-.landing-red-dot {
-  width: 0.4rem;
-  height: 0.4rem;
-  border-radius: 50%;
-  background: var(--source-red);
-}
 .landing-hero h1 {
   font-size: clamp(3rem, 5.3vw, 5.4rem);
   font-weight: 500;
-  letter-spacing: -0.065em;
+  letter-spacing: -0.045em;
   line-height: 1.06;
   white-space: pre-line;
   color: var(--landing-ink);
@@ -59,27 +53,21 @@
   flex-shrink: 0;
 }
 .landing-spotlight {
-  position: relative;
-  min-height: 36rem;
-  margin-left: 1rem;
-  margin-bottom: 1rem;
+  min-width: 0;
 }
 .spotlight-main {
-  position: absolute;
-  inset: 0 0 2rem 0;
-  border-radius: 1.5rem;
+  display: block;
+}
+.spotlight-image {
+  position: relative;
+  aspect-ratio: 4 / 4.5;
   overflow: hidden;
-  background: #e6e6df;
-  color: #fff;
+  border-radius: 0.85rem;
+  background: var(--secondary);
 }
-.spotlight-main > img {
+.spotlight-image > img {
   object-fit: cover;
-  transition: transform 500ms;
-}
-.spotlight-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, #06160e18, transparent 40%, #06160ec7);
+  transition: transform 400ms;
 }
 .spotlight-tag {
   position: absolute;
@@ -95,83 +83,25 @@
   letter-spacing: 0.13em;
 }
 .spotlight-caption {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 1.5rem;
-  right: 1.5rem;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  padding-top: 1.25rem;
 }
 .spotlight-caption small {
   display: block;
-  font-size: 0.65rem;
-  margin-bottom: 0.5rem;
-  color: #ffffffce;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-bottom: 0.35rem;
 }
 .spotlight-caption strong {
-  display: block;
-  max-width: 19rem;
-  font-size: 1.7rem;
+  font-size: 1rem;
   font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.015em;
 }
 .spotlight-caption > svg {
   flex-shrink: 0;
-}
-.spotlight-secondary {
-  position: absolute;
-  bottom: -0.3rem;
-  right: -0.75rem;
-  width: 10rem;
-  padding: 0.4rem;
-  background: var(--background);
-  border-radius: 1rem;
-  box-shadow: 0 8px 30px #173e2c16;
-  transform: rotate(5deg);
-}
-.spotlight-secondary > div {
-  position: relative;
-  height: 8rem;
-  border-radius: 0.7rem;
-  overflow: hidden;
-}
-.spotlight-secondary img {
-  object-fit: cover;
-}
-.spotlight-secondary > span {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.6rem;
-  font-weight: 500;
-  padding: 0.6rem 0.3rem 0.3rem;
-}
-.spotlight-secondary svg {
-  flex-shrink: 0;
-}
-.spotlight-seal {
-  position: absolute;
-  bottom: 0;
-  left: -1rem;
-  display: flex;
-  gap: 0.7rem;
-  align-items: center;
-  background: var(--source-red);
-  color: #fff7e2;
-  padding: 0.85rem 1.1rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 8px 20px #80301715;
-}
-.spotlight-seal > span:nth-child(2) {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.55rem;
-  letter-spacing: 0.12em;
 }
 .landing-spotlight-empty {
   display: flex;
@@ -264,7 +194,7 @@
   margin-bottom: 0.25rem;
 }
 .landing-page .product-image {
-  border-radius: 1.1rem;
+  border-radius: 0.85rem;
 }
 .landing-page .product-grid {
   gap: 1.25rem;
@@ -273,23 +203,12 @@
   position: relative;
   margin-top: 5rem;
   padding: 3.5rem;
-  border-radius: 1.75rem;
+  border-radius: 1rem;
   background: var(--landing-ink);
   color: #fffcf2;
   overflow: hidden;
 }
-.landing-assurance::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: 4px;
-  background: linear-gradient(
-    90deg,
-    var(--primary) 0 65%,
-    var(--source-gold) 65% 80%,
-    var(--source-red) 80%
-  );
-}
+
 .assurance-heading {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
@@ -298,7 +217,7 @@
 }
 .assurance-heading .eyebrow {
   grid-column: 1/-1;
-  color: #d8c895;
+  color: #c4d0c5;
   margin-bottom: 1rem;
 }
 .assurance-heading > p:last-child {
@@ -315,58 +234,6 @@
 }
 .assurance-grid article {
   min-width: 0;
-}
-.assurance-art {
-  height: 8.5rem;
-  margin-bottom: 1.25rem;
-  border-top: 1px solid #ffffff20;
-  border-bottom: 1px solid #ffffff20;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.65rem;
-  color: #eddaa5;
-}
-.currency-art {
-  position: relative;
-  justify-content: flex-start;
-}
-.currency-art > span {
-  font-size: 3.5rem;
-  letter-spacing: -0.05em;
-  font-weight: 400;
-}
-.currency-art small {
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  margin-top: 1.5rem;
-}
-.currency-art i {
-  margin-left: auto;
-  border: 1px solid #eddaa560;
-  border-radius: 50%;
-  padding: 0.6rem;
-}
-.tracking-art i {
-  height: 1px;
-  flex: 1;
-  max-width: 2rem;
-  background: #eddaa570;
-}
-.tracking-art > span {
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-}
-.language-art > span {
-  font-size: 1.8rem;
-  letter-spacing: -0.04em;
-  padding: 0.6rem;
-}
-.language-art > span:nth-child(2) {
-  border: 1px solid #eddaa550;
-  border-radius: 0.8rem;
-  transform: rotate(-7deg);
-  color: #fffdf4;
 }
 .assurance-grid h3 {
   font-size: 1rem;
@@ -385,7 +252,7 @@
   gap: 0.75rem;
   margin-top: 2rem;
   font-size: 0.75rem;
-  color: #eddaa5;
+  color: #e6ece4;
 }
 .landing-page .department-card {
   background: #f7f6f0;
@@ -408,25 +275,6 @@
 .process-intro h2 {
   margin-top: 1rem;
 }
-.process-cultures {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin: 2rem 0;
-  color: var(--source-red);
-}
-.process-cultures span {
-  font-size: 2rem;
-  letter-spacing: -0.04em;
-}
-.process-cultures span:last-child {
-  color: var(--primary);
-}
-.process-cultures > svg {
-  width: 2rem;
-  height: 2rem;
-  color: #aa8d48;
-}
 .landing-process ol {
   list-style: none;
   padding: 0;
@@ -446,7 +294,7 @@
 .step-number {
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
-  color: var(--source-red);
+  color: var(--primary);
   padding-top: 0.3rem;
 }
 .landing-process h3 {
@@ -509,17 +357,14 @@
   position: relative;
   overflow: hidden;
   text-align: center;
-  border-radius: 1.75rem;
+  border-radius: 1rem;
   background: var(--landing-cream);
   padding: 4rem 2rem;
   margin-bottom: 5rem;
 }
-.landing-closing > :not(.closing-globe) {
-  position: relative;
-}
 .landing-closing .eyebrow {
   justify-content: center;
-  color: var(--source-red);
+  color: var(--primary);
 }
 .landing-closing h2 {
   margin: 1.25rem 0;
@@ -533,28 +378,8 @@
   margin: 0 auto 1.75rem;
   line-height: 1.8;
 }
-.closing-globe {
-  position: absolute;
-  right: -8rem;
-  top: 3rem;
-  opacity: 0.08;
-  color: var(--primary);
-}
-.closing-signature {
-  display: block;
-  margin-top: 2rem;
-  font-size: 0.85rem;
-  color: #767a68;
-  letter-spacing: 0.05em;
-}
-.closing-signature > svg {
-  display: inline-block;
-  vertical-align: middle;
-  color: var(--source-red);
-  margin-inline: 0.75rem;
-}
 @media (hover: hover) {
-  .spotlight-main:hover > img {
+  .spotlight-main:hover .spotlight-image > img {
     transform: scale(1.025);
   }
 }
@@ -565,22 +390,12 @@
   .landing-hero h1 {
     font-size: 3.5rem;
   }
-  .landing-spotlight {
-    min-height: 32rem;
-    margin-left: 0;
-  }
+
   .landing-assurance {
     padding: 2rem;
   }
   .assurance-grid {
     gap: 1.25rem;
-  }
-  .currency-art > span {
-    font-size: 2.5rem;
-  }
-  .language-art > span {
-    font-size: 1.5rem;
-    padding: 0.3rem;
   }
 }
 @media (max-width: 640px) {
@@ -611,30 +426,7 @@
   .landing-shop-note {
     margin-top: 1.2rem;
   }
-  .landing-spotlight {
-    min-height: 29rem;
-    margin: 0 0.6rem 0 0.25rem;
-  }
-  .spotlight-main {
-    border-radius: 1.25rem;
-  }
-  .spotlight-secondary {
-    width: 8rem;
-    right: -0.5rem;
-  }
-  .spotlight-secondary > div {
-    height: 6rem;
-  }
-  .spotlight-caption {
-    bottom: 3.5rem;
-  }
-  .spotlight-caption strong {
-    font-size: 1.45rem;
-    max-width: 13rem;
-  }
-  .spotlight-seal {
-    left: -0.25rem;
-  }
+
   .landing-connection {
     flex-wrap: wrap;
     justify-content: space-between;
@@ -681,19 +473,6 @@
     gap: 1.5rem;
     margin-top: 1.5rem;
   }
-  .assurance-art {
-    height: 6rem;
-    margin-bottom: 1rem;
-    border-bottom: none;
-    justify-content: flex-start;
-  }
-  .currency-art i {
-    margin-left: 1rem;
-  }
-  .language-art > span {
-    font-size: 1.75rem;
-    padding: 0.5rem;
-  }
   .landing-page .department-card {
     padding: 1rem;
   }
@@ -706,23 +485,31 @@
   .landing-process {
     margin-top: 2rem;
   }
-  .process-cultures {
-    margin-block: 1.5rem;
-  }
   .landing-closing {
     padding: 2.75rem 1.5rem;
     margin-bottom: 3rem;
     border-radius: 1.25rem;
   }
 }
+.assurance-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-bottom: 1.5rem;
+  color: #d4dfd4;
+}
+.assurance-grid article {
+  border-top: 1px solid #ffffff26;
+  padding-top: 1.5rem;
+}
+.process-intro .text-link {
+  margin-top: 1.5rem;
+}
 @media (prefers-reduced-motion: reduce) {
-  .spotlight-main > img,
+  .spotlight-image > img,
   .landing-faq summary > svg {
     transition: none;
   }
-  .spotlight-main:hover > img,
-  .spotlight-secondary,
-  .language-art > span:nth-child(2) {
+  .spotlight-main:hover .spotlight-image > img {
     transform: none;
   }
 }

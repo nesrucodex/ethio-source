@@ -44,7 +44,10 @@ export function Catalog() {
     );
   return (
     <div className="shell page-content">
-      <h1 className="sr-only">{t("shop")}</h1>
+      <div className="catalog-heading">
+        <p className="eyebrow">{t("selected")}</p>
+        <h1>{t("shop")}</h1>
+      </div>
       <FilterToolbar className="mb-6">
         <SearchField
           value={search}

@@ -4,24 +4,20 @@ import { ArrowUpRight } from "lucide-react";
 import { useCatalog, useTranslation } from "@/components/providers";
 import { ProductImage } from "@/components/shared/product-image";
 import { LoadingCards, Notice, EmptyState } from "@/components/shared/states";
+import { LoadingRegion } from "@/components/shared/loading";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductCard } from "./product-card";
 import { landingCopy } from "@/lib/landing-copy";
 export function LandingSpotlight() {
   const { products } = useCatalog();
   const { locale, t } = useTranslation();
-  const picks = products?.filter((p) => p.featured).slice(0, 2);
-  const main = picks?.[0] ?? products?.[0];
-  const secondary = picks?.[1];
+  const main = products?.find((p) => p.featured) ?? products?.[0];
   if (!products)
     return (
-      <div
-        className="landing-spotlight"
-        role="status"
-        aria-label="Loading collection"
-      >
-        <Skeleton className="absolute inset-0 rounded-3xl" />
-      </div>
+      <LoadingRegion className="landing-spotlight" label="Loading collection">
+        <Skeleton className="aspect-[4/4.5] rounded-xl" />
+        <Skeleton className="mt-5 h-5 w-2/3" />
+      </LoadingRegion>
     );
   if (!main)
     return (
@@ -35,15 +31,16 @@ export function LandingSpotlight() {
   return (
     <div className="landing-spotlight">
       <Link href={`/products/${main.slug}`} className="spotlight-main">
-        <ProductImage
-          src={main.image}
-          alt={main.name[locale]}
-          fill
-          priority
-          sizes="(max-width:640px) 100vw, 50vw"
-        />
-        <div className="spotlight-shade" />
-        <span className="spotlight-tag">{t("selected")}</span>
+        <div className="spotlight-image">
+          <ProductImage
+            src={main.image}
+            alt={main.name[locale]}
+            fill
+            priority
+            sizes="(max-width:640px) 100vw, 50vw"
+          />
+          <span className="spotlight-tag">{t("selected")}</span>
+        </div>
         <span className="spotlight-caption">
           <span>
             <small>{landingCopy[locale].edit}</small>
@@ -52,32 +49,6 @@ export function LandingSpotlight() {
           <ArrowUpRight size={24} />
         </span>
       </Link>
-      {secondary && (
-        <Link
-          className="spotlight-secondary"
-          href={`/products/${secondary.slug}`}
-        >
-          <div>
-            <ProductImage
-              src={secondary.image}
-              alt={secondary.name[locale]}
-              fill
-              sizes="(max-width:640px) 120px, 180px"
-            />
-          </div>
-          <span>
-            {secondary.name[locale]}
-            <ArrowUpRight size={16} />
-          </span>
-        </Link>
-      )}
-      <div className="spotlight-seal" aria-label="China to Ethiopia">
-        <span lang="zh">中</span>
-        <span>
-          CN <ArrowUpRight size={12} aria-hidden="true" /> ET
-        </span>
-        <span lang="am">ኢ</span>
-      </div>
     </div>
   );
 }

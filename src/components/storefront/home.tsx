@@ -7,7 +7,8 @@ import {
   Check,
   Plus,
   Package,
-  Globe2,
+  Languages,
+  CreditCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/components/providers";
@@ -21,10 +22,7 @@ export function Home() {
     <div className="landing-page">
       <section className="landing-hero shell">
         <div className="landing-hero-copy">
-          <p className="eyebrow">
-            <span className="landing-red-dot" />
-            {t("eyebrow")}
-          </p>
+          <p className="eyebrow">{t("eyebrow")}</p>
           <h1>{t("hero")}</h1>
           <p className="landing-intro">{t("intro")}</p>
           <div className="landing-actions">
@@ -85,33 +83,29 @@ export function Home() {
         </div>
         <div className="assurance-grid">
           <article>
-            <div className="assurance-art currency-art" aria-hidden="true">
-              <span>ETB</span>
-              <small>ብር · BIRR</small>
-              <i>
-                <Check size={16} />
-              </i>
-            </div>
+            <CreditCard
+              className="assurance-icon"
+              aria-hidden="true"
+              strokeWidth={1.5}
+            />
             <h3>{copy.paymentTitle}</h3>
             <p>{copy.paymentBody}</p>
           </article>
           <article>
-            <div className="assurance-art tracking-art" aria-hidden="true">
-              <span>CN</span>
-              <i />
-              <Package size={28} strokeWidth={1.25} />
-              <i />
-              <span>ET</span>
-            </div>
+            <Package
+              className="assurance-icon"
+              aria-hidden="true"
+              strokeWidth={1.5}
+            />
             <h3>{copy.trackingTitle}</h3>
             <p>{copy.trackingBody}</p>
           </article>
           <article>
-            <div className="assurance-art language-art" aria-hidden="true">
-              <span>Aa</span>
-              <span lang="am">አ</span>
-              <span lang="om">Oo</span>
-            </div>
+            <Languages
+              className="assurance-icon"
+              aria-hidden="true"
+              strokeWidth={1.5}
+            />
             <h3>{copy.languageTitle}</h3>
             <p>{copy.languageBody}</p>
           </article>
@@ -134,11 +128,6 @@ export function Home() {
         <div className="process-intro">
           <p className="eyebrow">{copy.journeyLabel}</p>
           <h2>{copy.journeyTitle}</h2>
-          <div className="process-cultures" aria-hidden="true">
-            <span lang="zh">中国</span>
-            <ArrowUpRight strokeWidth={1} />
-            <span lang="am">ኢትዮጵያ</span>
-          </div>
           <Link className="text-link" href="/how-it-works">
             {t("how")}
             <ArrowUpRight size={16} />
@@ -178,12 +167,6 @@ export function Home() {
         </div>
       </section>
       <section className="landing-closing shell">
-        <Globe2
-          className="closing-globe"
-          size={300}
-          strokeWidth={0.5}
-          aria-hidden="true"
-        />
         <p className="eyebrow">{copy.closingLabel}</p>
         <h2>{copy.closingTitle}</h2>
         <p>{copy.closingBody}</p>
@@ -193,9 +176,6 @@ export function Home() {
             <ArrowRight />
           </Link>
         </Button>
-        <span className="closing-signature" aria-hidden="true">
-          中国 <ArrowUpRight size={16} aria-hidden="true" /> ኢትዮጵያ
-        </span>
       </section>
     </div>
   );

@@ -7,9 +7,9 @@
   min-width: 0;
   padding: 0.1875rem;
   border: 1px solid color-mix(in srgb, var(--border) 75%, transparent);
-  border-radius: 1rem;
+  border-radius: var(--surface-radius);
   background: color-mix(in srgb, var(--secondary) 65%, var(--background));
-  box-shadow: inset 0 1px 0 #ffffff90;
+  box-shadow: none;
   transition:
     border-color 160ms,
     box-shadow 160ms;
@@ -70,7 +70,7 @@
   border-radius: 0.75rem;
   margin: 0;
   background: var(--card);
-  box-shadow: 0 1px 3px #173e2c09;
+  box-shadow: none;
   color: var(--primary);
   font-size: 0.8rem;
   font-weight: 500;

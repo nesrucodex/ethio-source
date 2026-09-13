@@ -2,7 +2,6 @@
 import { ProductImage as Image } from "@/components/shared/product-image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 import { ProductQuantity } from "./product-quantity";
 import { useCatalog, useTranslation } from "@/components/providers";
@@ -13,11 +12,7 @@ export function ProductCard({ product }: { product: Doc<"products"> }) {
   const { rates } = useCatalog();
   const available = Math.max(0, product.stock - product.reserved);
   return (
-    <motion.article
-      className="product-card"
-      whileHover={{ y: -4 }}
-      transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-    >
+    <article className="product-card">
       <Link href={`/products/${product.slug}`} className="product-image">
         <Image
           src={product.image}
@@ -28,12 +23,10 @@ export function ProductCard({ product }: { product: Doc<"products"> }) {
         <div className="product-badges">
           {!available ? (
             <Badge variant="secondary">{t("soldOut")}</Badge>
-          ) : product.featured ? (
-            <Badge variant="secondary">The edit</Badge>
           ) : null}
         </div>
         <span className="product-peek">
-          <ArrowUpRight size={18} />
+          <ArrowUpRight size={18} aria-hidden="true" />
         </span>
       </Link>
       <div className="product-info">
@@ -62,6 +55,6 @@ export function ProductCard({ product }: { product: Doc<"products"> }) {
           />
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }

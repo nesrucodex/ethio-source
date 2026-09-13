@@ -1,7 +1,7 @@
 .admin-data-table {
   min-width: 0;
   border: 1px solid var(--border);
-  border-radius: 1rem;
+  border-radius: var(--surface-radius);
   background: var(--card);
   overflow: hidden;
 }
@@ -9,7 +9,7 @@
   height: 2.5rem;
   font-size: 0.75rem;
   color: var(--muted-foreground);
-  background: var(--muted);
+  background: color-mix(in srgb, var(--secondary) 55%, var(--card));
 }
 .admin-data-table [data-slot="table-cell"] {
   height: calc(var(--control-height) + 0.75rem);
