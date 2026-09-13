@@ -1,9 +1,13 @@
 import { generateKeyPairSync } from "node:crypto";
 
+const deploymentArgs = process.env.CONVEX_ENV_FILE
+  ? ["--env-file", process.env.CONVEX_ENV_FILE]
+  : [];
+
 // Run after deploying functions. Secrets never appear in terminal output.
 for (const name of ["JWT_PRIVATE_KEY", "JWKS"]) {
   const result = Bun.spawnSync(
-    ["bunx", "--bun", "convex", "env", "get", name],
+    ["bunx", "--bun", "convex", "env", "get", name, ...deploymentArgs],
     { stdout: "pipe", stderr: "pipe" },
   );
   if (result.exitCode !== 0) {
@@ -29,7 +33,7 @@ for (const [name, value] of Object.entries({
   JWKS: JSON.stringify({ keys: [{ use: "sig", ...publicKey }] }),
 })) {
   const result = Bun.spawnSync(
-    ["bunx", "--bun", "convex", "env", "set", name],
+    ["bunx", "--bun", "convex", "env", "set", name, ...deploymentArgs],
     { stdin: Buffer.from(value), stdout: "pipe", stderr: "pipe" },
   );
   if (result.exitCode !== 0)

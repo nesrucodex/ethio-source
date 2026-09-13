@@ -5,6 +5,10 @@ import { z } from "zod";
 import { api } from "../convex/_generated/api";
 import type { Id } from "../convex/_generated/dataModel";
 
+const deploymentArgs = process.env.CONVEX_ENV_FILE
+  ? ["--env-file", process.env.CONVEX_ENV_FILE]
+  : [];
+
 class SeedError extends Error {}
 
 const emailSchema = z.email();
@@ -41,7 +45,15 @@ async function answer(
 function run<T>(name: string, args: object): T {
   // Only emails and user IDs reach CLI arguments. Passwords go directly to Convex Auth over HTTP.
   const result = Bun.spawnSync(
-    ["bunx", "--bun", "convex", "run", name, JSON.stringify(args)],
+    [
+      "bunx",
+      "--bun",
+      "convex",
+      "run",
+      name,
+      JSON.stringify(args),
+      ...deploymentArgs,
+    ],
     { stdout: "pipe", stderr: "pipe" },
   );
   if (result.exitCode !== 0)

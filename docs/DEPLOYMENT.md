@@ -6,7 +6,7 @@ The web app is Next.js 16.3.5 / React 19.2.8 with App Router, using Bun for inst
 
 Use a cloud Convex deployment for production. Local Convex at `127.0.0.1:3210` is only for development. Configure the real deployment with the Convex CLI and keep the generated URLs in `.env.local` locally and the hosting environment in production. Never ship a localhost URL to a hosted storefront.
 
-For a Bun-capable server, install with `bun install --frozen-lockfile`, build with `bun run build`, and serve with `bun run start` behind an HTTPS reverse proxy. Hosting providers with native Next.js support can use their adapter with Bun as package manager; their server runtime may differ. No public deployment has been created by this implementation.
+For a Bun-capable server, install with `bun install --frozen-lockfile`, build with `bun run build`, and serve with `bun run start` behind an HTTPS reverse proxy. Hosting providers with native Next.js support can use their adapter with Bun as package manager; their server runtime may differ. The public source repository is https://github.com/nesrucodex/ethio-source. Vercel publication requires account authentication.
 
 A Bun multi-stage `Dockerfile` is included and runs the Next.js standalone output as a non-root user. Supply the three public URL values as build arguments. The image does not include `.env` files or local Convex data. A Docker image build has not been verified in this environment.
 
@@ -22,10 +22,10 @@ Deploy the backend with `bunx --bun convex deploy`, using the correct project. P
 
 The app uses Convex for persistent data, realtime subscriptions, authentication, and uploaded files. Vercel hosts Next.js. You do not need another database or to override Convex's built-in `CONVEX_CLOUD_URL` / `CONVEX_SITE_URL` settings shown in the dashboard.
 
-The configured cloud **development** deployment is `stoic-gerbil-925` in project `ethio-source`. Its backend and original local data have been deployed, including accounts, admin roles, catalog, and uploaded files. It persists independently of your laptop. The supplied development key cannot deploy a separate production database.
+The configured cloud **development** deployment is `stoic-gerbil-925` in project `ethio-source`. Its backend and original local data have been deployed, including accounts, admin roles, catalog, and uploaded files. It persists independently of your laptop. The supplied development key cannot deploy a separate production database. Production has now been provisioned as `glorious-bullfrog-250`, with functions, migrated data/files, and its own authentication signing keys. Its deploy key is stored only in ignored `.env.production.local`; set the final storefront URL when Vercel is linked.
 
 1. In the Convex dashboard, create/select the project's **Production** deployment. Generate its production deploy key with deployment permission. Keep it in a password manager and Vercel; never commit it or prefix it with `NEXT_PUBLIC_`. Revoke and replace the development key shared in chat, and update `.env.local` with its replacement.
-2. Push this Git repository to your Git hosting account and import it at Vercel. The repository currently has no remote configured. Select the Next.js framework; `vercel.json` supplies the install and build commands.
+2. Push this Git repository to your Git hosting account and import it at Vercel. The public repository is [nesrucodex/ethio-source](https://github.com/nesrucodex/ethio-source), configured as `origin`. Select the Next.js framework; `vercel.json` supplies the install and build commands.
 3. Add these Vercel variables, scoped to **Production**:
 
    | Variable | Value |
@@ -71,7 +71,7 @@ Backups include file storage. Imports preserve IDs and references and refuse to 
 
 `backups/`, `.env*` (except `.env.example`), and `.vercel/` are ignored by Git. Store a protected off-machine copy of backups. The initial local snapshot is `backups/local-before-cloud.zip`; `.env.local-backup` retains the old local connection. Neither was deleted by migration. To work against that local database again, restore those connection settings to `.env.local`, remove the cloud key from that file/environment, and start `make backend`.
 
-The Makefile defaults to `.env.local`; pass `ENV_FILE=.env.production.local` deliberately for production. Keep every deployment's key and public URLs together in that file. A missing environment file fails before running a command.
+The Makefile defaults to `.env.local`; pass `ENV_FILE=.env.production.local` deliberately for production. Keep every deployment's key and public URLs together in that file. The Makefile passes it explicitly to every Convex command, including child commands in auth/admin/deploy scripts, so the CLI cannot silently fall back to `.env.local`. A missing environment file fails before running a command.
 
 ## Authentication and recovery
 

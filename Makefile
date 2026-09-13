@@ -2,7 +2,7 @@
 ENV_FILE ?= .env.local
 SNAPSHOT ?= backups/snapshot.zip
 SITE_URL ?= http://localhost:3000
-BUN := bun --env-file="$(ENV_FILE)"
+BUN := CONVEX_ENV_FILE="$(ENV_FILE)" bun --env-file="$(ENV_FILE)"
 CONVEX := $(BUN) x --bun convex
 
 .PHONY: help install dev backend check build cloud-push auth-setup site-url seed-admin seed-demo dashboard backup migrate deploy
@@ -28,7 +28,7 @@ dev:
 	$(BUN) run dev
 
 backend:
-	$(CONVEX) dev
+	$(CONVEX) dev --env-file "$(ENV_FILE)"
 
 check:
 	bun run typecheck
@@ -39,30 +39,30 @@ build:
 	$(BUN) run build
 
 cloud-push:
-	$(CONVEX) dev --once
+	$(CONVEX) dev --env-file "$(ENV_FILE)" --once
 
 auth-setup:
 	$(BUN) scripts/setup-auth.ts
 
 site-url:
-	$(CONVEX) env set SITE_URL "$(SITE_URL)"
+	$(CONVEX) env set SITE_URL --env-file "$(ENV_FILE)" "$(SITE_URL)"
 
 seed-admin:
 	$(BUN) run seed:admin
 
 seed-demo:
-	$(CONVEX) run seed:catalog
+	$(CONVEX) run seed:catalog --env-file "$(ENV_FILE)"
 
 dashboard:
-	$(CONVEX) dashboard
+	$(CONVEX) dashboard --env-file "$(ENV_FILE)"
 
 backup:
 	@mkdir -p backups
 	@chmod 700 backups
-	$(CONVEX) export --include-file-storage --path "$(SNAPSHOT)"
+	$(CONVEX) export --include-file-storage --env-file "$(ENV_FILE)" --path "$(SNAPSHOT)"
 
 migrate:
-	$(CONVEX) import "$(SNAPSHOT)"
+	$(CONVEX) import "$(SNAPSHOT)" --env-file "$(ENV_FILE)"
 
 deploy:
 	$(BUN) run build:vercel

@@ -19,12 +19,17 @@ if (!siteUrl || new URL(siteUrl).protocol !== "https:") {
     "Set NEXT_PUBLIC_SITE_URL to the HTTPS storefront URL before deploying.",
   );
 }
+const deploymentArgs = process.env.CONVEX_ENV_FILE
+  ? ["--env-file", process.env.CONVEX_ENV_FILE]
+  : [];
+
 const child = Bun.spawn(
   [
     "bunx",
     "--bun",
     "convex",
     "deploy",
+    ...deploymentArgs,
     "--cmd",
     "bun run build",
     "--cmd-url-env-var-name",
