@@ -20,8 +20,14 @@ export function ProductQuantity({
     (s) => s.items.find((item) => item.productId === productId)?.quantity ?? 0,
   );
   const add = useShop((s) => s.add);
-  const quantity = useShop((s) => s.quantity);
-  const remove = useShop((s) => s.remove);
+  function decrease() {
+    // Read on click so rapid taps cannot reuse a stale rendered count.
+    const shop = useShop.getState();
+    const current =
+      shop.items.find((item) => item.productId === productId)?.quantity ?? 0;
+    if (current <= 1) shop.remove(productId);
+    else shop.quantity(productId, current - 1);
+  }
   return (
     <div
       className="product-quantity"
@@ -35,9 +41,7 @@ export function ProductQuantity({
             variant="ghost"
             size="icon"
             aria-label={`Decrease quantity: ${name}`}
-            onClick={() =>
-              count === 1 ? remove(productId) : quantity(productId, count - 1)
-            }
+            onClick={decrease}
           >
             <Minus aria-hidden="true" />
           </Button>
